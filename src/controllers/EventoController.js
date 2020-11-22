@@ -2,45 +2,44 @@ const express = require('express');
 const router = express.Router();
 
 const Eventos = require('../database')('evento')
+const knex = require('../database')
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
   const { edicao, fk_localizacao_id, nome, tema, valorinscricao } = req.body;
-  try {
-    const evento = await Eventos.insert({ edicao, fk_localizacao_id, nome, tema, valorinscricao }, '*');
-    return res.status(201).json(evento);
 
-  } catch (erro) {
-    return res.status(500).json({ erro })
-  }
+  const evento = await Eventos.insert({ edicao, fk_localizacao_id, nome, tema, valorinscricao }, '*');
+  
+  return res.status(201).json(evento);
+
 });
 
 // RETURNS ALL IN THE DATABASE
 router.get('/', async (req, res) => {
-  try {
-    const eventos = await Eventos.select('*');
-    return res.status(200).send(eventos);
+  const eventos = await knex
+    .select(['evento.*', 'localizacao.endereco'])
+    .from('evento')
+    .leftJoin('localizacao', 'evento.fk_localizacao_id', 'localizacao.id')
 
-  } catch (erro) {
-    return res.status(500).json({ erro })
-  }
+  return res.status(200).send(eventos);
 });
 
 // GETS A SINGLE FROM THE DATABASE
 router.get('/:id', async (req, res) => {
   const { id } = req.params
 
-  try {
-    const evento = await Eventos.where('id', id).select('*').first();
+  const evento = await knex
+    .select(['evento.*', 'localizacao.endereco'])
+    .from('evento')
+    .leftJoin('localizacao', 'localizacao.id', 'fk_localizacao_id')
+    .where('evento.id', id)
+    .first();
 
-    if (!evento) {
-      return res.status(404).json({ erro: 'Evento não encontrado' })
-    }
-    return res.json(evento)
-
-  } catch (erro) {
-    return res.status(500).json({ erro })
+  if (!evento) {
+    return res.status(404).json({ erro: 'Evento não encontrado' })
   }
+
+  return res.json(evento)
 });
 
 // DELETES A FROM THE DATABASE
