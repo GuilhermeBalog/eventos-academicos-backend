@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Localizacoes = require('../database')('localizacao')
+const knex = require('../database')
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
@@ -18,8 +19,8 @@ router.post('/', async (req, res) => {
 // RETURNS ALL IN THE DATABASE
 router.get('/', async (req, res) => {
   try {
-    const localizacoes = await Localizacoes.select('*');
-    return res.status(200).send(localizacoes);
+    const localizacoes = await knex.select('*').from('localizacao');
+    return res.status(200).json(localizacoes);
 
   } catch (erro) {
     return res.status(500).json({ erro })
@@ -48,7 +49,9 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    await Localizacoes.where('id', id).del();
+
+    const a = await knex('localizacao').where('id', id).del();
+    console.log(a);
 
     return res.json({ message: "A localização foi excluída" })
 
