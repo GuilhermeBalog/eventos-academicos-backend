@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const localizacao = await Localizacoes.where('id', id).select('*').first();
+    const localizacao = await knex.select('*').from('localizacao').where('id', id).first();
 
     if (!localizacao) {
       return res.status(404).json({ erro: 'Localização não encontrada' })
