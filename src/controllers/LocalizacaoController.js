@@ -50,8 +50,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
 
-    const a = await knex('localizacao').where('id', id).del();
-    console.log(a);
+    await knex('localizacao').where('id', id).del();
 
     return res.json({ message: "A localização foi excluída" })
 

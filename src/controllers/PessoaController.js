@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
       .first();
 
     if (!pessoa) {
-      return res.status(404).json({ erro: 'Pessoas não encontrada' })
+      return res.status(404).json({ erro: 'Pessoa não encontrada' })
     }
 
     const eventos = await knex
@@ -63,7 +63,7 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    await Pessoas.where('id', id).del();
+    await knex('pessoas').where('id', id).del();
 
     return res.json({ message: "A pessoa foi excluída" })
 
@@ -75,6 +75,7 @@ router.delete('/:id', async (req, res) => {
 // UPDATES A SINGLE IN THE DATABASE
 router.put('/:id', async (req, res) => {
   const { id } = req.params
+
   try {
     const pessoa = await Pessoas.where('id', id).update(req.body, '*');
 
