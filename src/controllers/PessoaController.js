@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
 // RETURNS ALL IN THE DATABASE
 router.get('/', async (req, res) => {
   try {
-    const pessoas = await Pessoas.select('*');
+    const pessoas = await knex.select('*').from('pessoas');
     return res.status(200).send(pessoas);
 
   } catch (erro) {
