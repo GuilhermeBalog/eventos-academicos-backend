@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Pessoas = require('../database')('pessoas')
+const knex = require('../database');
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
@@ -31,11 +32,25 @@ router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const pessoa = await Pessoas.where('id', id).select('*').first();
+    const pessoa = await knex
+      .select('*')
+      .from('pessoas')
+      .where('id', id)
+      .first();
 
     if (!pessoa) {
-      return res.status(404).json({ erro: 'Pessoa não encontrada' })
+      return res.status(404).json({ erro: 'Pessoas não encontrada' })
     }
+
+    const eventos = await knex
+      .select(['evento.*', 'pessoaparticipaevento.datacompra'])
+      .from('pessoas')
+      .join('pessoaparticipaevento', 'pessoas.id', 'fk_pessoas_id')
+      .join('evento', 'evento.id', 'fk_evento_id')
+      .where('pessoas.id', id)
+
+    pessoa.eventos = eventos
+
     return res.json(pessoa)
 
   } catch (erro) {

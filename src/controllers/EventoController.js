@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
   const { edicao, fk_localizacao_id, nome, tema, valorinscricao } = req.body;
 
   const evento = await Eventos.insert({ edicao, fk_localizacao_id, nome, tema, valorinscricao }, '*');
-  
+
   return res.status(201).json(evento);
 
 });
@@ -38,6 +38,15 @@ router.get('/:id', async (req, res) => {
   if (!evento) {
     return res.status(404).json({ erro: 'Evento não encontrado' })
   }
+
+  const pessoas = await knex
+    .select(['pessoas.*', 'pessoaparticipaevento.datacompra'])
+    .from('pessoas')
+    .join('pessoaparticipaevento', 'pessoas.id', 'fk_pessoas_id')
+    .join('evento', 'evento.id', 'fk_evento_id')
+    .where('evento.id', id)
+
+  evento.pessoas = pessoas
 
   return res.json(evento)
 });
