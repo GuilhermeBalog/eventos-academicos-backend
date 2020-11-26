@@ -5,9 +5,9 @@ const knex = require('../database')
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
-  const { endereco, valor } = req.body;
+  const { nome, endereco, valor } = req.body;
   try {
-    const localizacao = await knex('localizacao').insert({ endereco, valor }, '*');
+    const localizacao = await knex('localizacao').insert({ nome, endereco, valor }, '*');
     return res.status(201).json(localizacao);
 
   } catch (erro) {
