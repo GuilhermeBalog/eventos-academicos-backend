@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const Ingressos = require('../database')('pessoaparticipaevento')
 const knex = require('../database');
 
 // CREATES A NEW
@@ -9,7 +8,7 @@ router.post('/', async (req, res) => {
   const { fk_evento_id, fk_pessoas_id, datacompra } = req.body;
 
   try {
-    const ingresso = await Ingressos.insert({
+    const ingresso = await knex('pessoaparticipaevento').insert({
       fk_evento_id: parseInt(fk_evento_id),
       fk_pessoas_id: parseInt(fk_pessoas_id),
       datacompra

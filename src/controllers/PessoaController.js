@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const Pessoas = require('../database')('pessoas')
 const knex = require('../database');
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
   const { nome, idade, sexo } = req.body;
   try {
-    const pessoa = await Pessoas.insert({ nome, idade, sexo }, '*');
+    const pessoa = await knex('pessoas').insert({ nome, idade, sexo }, '*');
     return res.status(201).json(pessoa);
 
   } catch (erro) {
@@ -77,7 +76,7 @@ router.put('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    const pessoa = await Pessoas.where('id', id).update(req.body, '*');
+    const pessoa = await knex('pessoas').where('id', id).update(req.body, '*');
 
     return res.json(pessoa)
 

@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const Eventos = require('../database')('evento')
 const knex = require('../database')
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
   const { edicao, fk_localizacao_id, nome, tema, valorinscricao } = req.body;
 
-  const evento = await Eventos.insert({ edicao, fk_localizacao_id, nome, tema, valorinscricao }, '*');
+  const evento = await knex('evento').insert({ edicao, fk_localizacao_id, nome, tema, valorinscricao }, '*');
 
   return res.status(201).json(evento);
 
@@ -56,7 +55,7 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
   try {
-    await Eventos.where('id', id).del();
+    await knex('evento').where('id', id).del();
 
     return res.json({ message: "O evento foi excluído" })
 
@@ -69,7 +68,7 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const { id } = req.params
   try {
-    const evento = await Eventos.where('id', id).update(req.body, '*');
+    const evento = await knex('evento').where('id', id).update(req.body, '*');
 
     return res.json(evento)
 

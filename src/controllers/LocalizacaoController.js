@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const Localizacoes = require('../database')('localizacao')
 const knex = require('../database')
 
 // CREATES A NEW
 router.post('/', async (req, res) => {
   const { endereco, valor } = req.body;
   try {
-    const localizacao = await Localizacoes.insert({ endereco, valor }, '*');
+    const localizacao = await knex('localizacao').insert({ endereco, valor }, '*');
     return res.status(201).json(localizacao);
 
   } catch (erro) {
@@ -63,7 +62,9 @@ router.delete('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const { id } = req.params
   try {
-    const localizacao = await Localizacoes.where('id', id).update(req.body, '*');
+    const [localizacao] = await knex('localizacao')
+      .where('id', id)
+      .update(req.body, '*');
 
     return res.json(localizacao)
 
