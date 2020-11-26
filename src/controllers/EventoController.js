@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 // RETURNS ALL IN THE DATABASE
 router.get('/', async (req, res) => {
   const eventos = await knex
-    .select(['evento.*', 'localizacao.endereco'])
+    .select(['evento.*', 'localizacao.endereco', 'localizacao.nome as localizacao'])
     .from('evento')
     .leftJoin('localizacao', 'evento.fk_localizacao_id', 'localizacao.id')
 
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
   const { id } = req.params
 
   const evento = await knex
-    .select(['evento.*', 'localizacao.endereco'])
+    .select(['evento.*', 'localizacao.endereco', 'localizacao.nome as localizacao'])
     .from('evento')
     .leftJoin('localizacao', 'localizacao.id', 'fk_localizacao_id')
     .where('evento.id', id)
