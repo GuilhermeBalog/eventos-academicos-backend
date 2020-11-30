@@ -11,4 +11,15 @@ A API possui as seguintes rotas
 - [/eventos](https://eventos-academicos-backend.herokuapp.com/eventos)
 - [/localizacoes](https://eventos-academicos-backend.herokuapp.com/localizacoes)
 
+Se optar por rodar localmente, é necessário ter instalado [Git](https://git-scm.com/downloads), o [Node.js](https://nodejs.org/pt-br/download/) e o [Yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable)
+
+Então clone o repositório, instale as dependências e rode os scripts:
+
+```bash
+git clone https://github.com/GuilhermeBalog/eventos-academicos-backend.git
+cd eventos-academicos-backend
+yarn
+yarn start
+```
+
 O CRUD pode ser acessado em [https://eventos-academicos-frontend.vercel.app/](https://eventos-academicos-frontend.vercel.app/)
